@@ -46,7 +46,7 @@
 }
 
 .progress {
-    background-color: rgba(255,255,255,0.3);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
 }
 
@@ -73,14 +73,14 @@
 
 .videoguide-table tbody tr {
     background: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     transition: all 0.3s ease;
 }
 
 .videoguide-table tbody tr:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .videoguide-table tbody td {
@@ -90,8 +90,8 @@
 }
 
 /* Filas vistas */
-.viewed-row {
-    background-color: #f0fff4 !important;
+.videoguide-table tbody tr.viewed-row {
+    background-color: #f0fff4;
 }
 
 .viewed-row .video-link {
@@ -124,11 +124,25 @@
     animation: fadeInUp 0.3s ease forwards;
 }
 
-.videoguide-table tbody tr.fade-in-row:nth-child(1) { animation-delay: 0s; }
-.videoguide-table tbody tr.fade-in-row:nth-child(2) { animation-delay: 0.1s; }
-.videoguide-table tbody tr.fade-in-row:nth-child(3) { animation-delay: 0.2s; }
-.videoguide-table tbody tr.fade-in-row:nth-child(4) { animation-delay: 0.3s; }
-.videoguide-table tbody tr.fade-in-row:nth-child(5) { animation-delay: 0.4s; }
+.videoguide-table tbody tr.fade-in-row:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.videoguide-table tbody tr.fade-in-row:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.videoguide-table tbody tr.fade-in-row:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.videoguide-table tbody tr.fade-in-row:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.videoguide-table tbody tr.fade-in-row:nth-child(5) {
+    animation-delay: 0.4s;
+}
 
 /* Botón de toggle visto */
 .toggle-view-btn {
@@ -162,7 +176,7 @@
 }
 
 .platform-youtube {
-    background-color: #ff0000;
+    background-color: #f00;
     color: white;
 }
 

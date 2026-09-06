@@ -19,11 +19,25 @@
     @package    mod_videoguide
     @copyright  2026 Daniel Ferrada
     @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+    @template mod_videoguide/video_fieldset
+
+    Video fieldset template for mod_videoguide form.
+
+    Example context (json):
+    {
+        "index": 0,
+        "indexPlusOne": 1,
+        "platforms": [
+            { "key": "youtube", "label": "YouTube" },
+            { "key": "zoom", "label": "Zoom" }
+        ]
+    }
 }}
 <div class="videoguide-video-item" id="video_fieldset_{{index}}">
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <span>{{#str}}video, mod_videoguide{{/str}} #{{index_plus_one}}</span>
+            <span>{{#str}}video, mod_videoguide{{/str}} #{{indexPlusOne}}</span>
             <button type="button" class="btn btn-danger btn-sm videoguide-remove-video" data-fieldset="video_fieldset_{{index}}">{{#str}}remove, moodle{{/str}}</button>
         </div>
         <div class="card-body">
@@ -59,9 +73,9 @@
                 <label class="col-form-label col-sm-3">{{#str}}visibility, mod_videoguide{{/str}}</label>
                 <div class="col-sm-9">
                     <div class="btn-group" role="group">
-                        <input type="radio" class="btn-check" name="video_enabled[{{index}}]" id="video_enabled_{{index}}_visible" value="1" autocomplete="off" checked>
+                        <input type="radio" class="btn-check" name="video_enabled[{{index}}]" id="video_enabled_{{index}}_visible" value="1" checked>
                         <label class="btn btn-outline-success" for="video_enabled_{{index}}_visible"><i class="fa fa-eye"></i> {{#str}}visible, mod_videoguide{{/str}}</label>
-                        <input type="radio" class="btn-check" name="video_enabled[{{index}}]" id="video_enabled_{{index}}_hidden" value="0" autocomplete="off">
+                        <input type="radio" class="btn-check" name="video_enabled[{{index}}]" id="video_enabled_{{index}}_hidden" value="0">
                         <label class="btn btn-outline-secondary" for="video_enabled_{{index}}_hidden"><i class="fa fa-eye-slash"></i> {{#str}}hidden, mod_videoguide{{/str}}</label>
                     </div>
                 </div>

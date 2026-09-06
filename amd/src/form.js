@@ -16,18 +16,21 @@
 /**
  * Dynamic form handling for mod_videoguide.
  *
- * @package    mod_videoguide
+ * @module     mod_videoguide/form
  * @copyright  2026 Daniel Ferrada
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['core/templates', 'core/str'], function(Templates, Str) {
+define(['core/templates', 'core/notification'], function(Templates, Notification) {
 
     var videoIndex = 0;
     var platformData = [];
 
     /**
      * Convert platform map to an array of {key, label} objects for the template.
+     *
+     * @param {Object} platforms The platform map (key => label).
+     * @return {Object[]} The list of {key, label} objects.
      */
     var buildPlatformList = function(platforms) {
         var list = [];
@@ -47,7 +50,7 @@ define(['core/templates', 'core/str'], function(Templates, Str) {
                     var platforms = JSON.parse(platformsJson);
                     platformData = buildPlatformList(platforms);
                 } catch (e) {
-                    console.error('Invalid platform JSON:', e);
+                    Notification.exception(e);
                 }
             }
         }
@@ -75,22 +78,23 @@ define(['core/templates', 'core/str'], function(Templates, Str) {
     var addVideoField = function() {
         var container = document.getElementById('videoguide-videos-container');
         if (!container) {
-            console.error('videoguide-videos-container not found');
+            Notification.exception('videoguide-videos-container not found');
             return;
         }
         var index = videoIndex;
 
         Templates.render('mod_videoguide/video_fieldset', {
             index: index,
-            index_plus_one: index + 1,
+            indexPlusOne: index + 1,
             platforms: platformData
         }).then(function(html) {
             var temp = document.createElement('div');
             temp.innerHTML = html;
             container.appendChild(temp.firstElementChild);
             videoIndex++;
+            return true;
         }).catch(function(error) {
-            console.error('Error rendering video fieldset template:', error);
+            Notification.exception(error);
         });
     };
 

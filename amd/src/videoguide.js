@@ -16,7 +16,7 @@
 /**
  * AMD module for mod_videoguide student view.
  *
- * @package    mod_videoguide
+ * @module     mod_videoguide/videoguide
  * @copyright  2026 Daniel Ferrada
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,6 +27,8 @@ define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], 
 
     /**
      * Open the video inside an embedded modal (pop-up window over the page).
+     *
+     * @param {HTMLElement} link The video link element.
      */
     var openModal = function(link) {
         var src = link.dataset.embedurl || link.href;
@@ -53,6 +55,8 @@ define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], 
 
     /**
      * Open the video in a floating browser pop-up window.
+     *
+     * @param {HTMLElement} link The video link element.
      */
     var openPopup = function(link) {
         var features = [

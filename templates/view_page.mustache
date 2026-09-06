@@ -19,6 +19,36 @@
     @package    mod_videoguide
     @copyright  2026 Daniel Ferrada
     @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+
+    @template mod_videoguide/view_page
+
+    View page template for mod_videoguide.
+
+    Example context (json):
+    {
+        "displaymethod": "newtab",
+        "viewedcount": 1,
+        "totalvideos": 3,
+        "progresspercent": 33,
+        "hasvideos": true,
+        "canmanage": false,
+        "videos": [
+            {
+                "id": 1,
+                "viewed": true,
+                "enabled": true,
+                "required": true,
+                "newtab": true,
+                "url": "https://www.youtube.com/watch?v=abc",
+                "embedurl": "https://www.youtube-nocookie.com/embed/abc",
+                "title": "Introduction",
+                "platform": "YouTube",
+                "platformclass": "youtube",
+                "platformicon": "fa-youtube",
+                "description": "Introduction video."
+            }
+        ]
+    }
 }}
 <div class="videoguide-wrapper" data-displaymethod="{{displaymethod}}">
 
