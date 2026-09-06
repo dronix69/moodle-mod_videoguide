@@ -31,21 +31,22 @@ use templatable;
 use stdClass;
 
 class view_page implements renderable, templatable {
-
     protected $videoguide;
     protected $videos;
     protected $progresspercent;
     protected $viewedcount;
     protected $totalvideos;
     protected $canmanage;
+    protected $displaymethod;
 
-    public function __construct($videoguide, $videos, $progresspercent, $viewedcount, $totalvideos, $canmanage) {
+    public function __construct($videoguide, $videos, $progresspercent, $viewedcount, $totalvideos, $canmanage, $displaymethod = 'newtab') {
         $this->videoguide = $videoguide;
         $this->videos = $videos;
         $this->progresspercent = $progresspercent;
         $this->viewedcount = $viewedcount;
         $this->totalvideos = $totalvideos;
         $this->canmanage = $canmanage;
+        $this->displaymethod = $displaymethod;
     }
 
     public function export_for_template(renderer_base $output) {
@@ -57,6 +58,7 @@ class view_page implements renderable, templatable {
         $data->viewedcount = $this->viewedcount;
         $data->totalvideos = $this->totalvideos;
         $data->canmanage = $this->canmanage;
+        $data->displaymethod = $this->displaymethod;
         $data->hasvideos = !empty($this->videos);
         $data->sesskey = sesskey();
         return $data;

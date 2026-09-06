@@ -20,7 +20,7 @@
     @copyright  2026 Daniel Ferrada
     @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
-<div class="videoguide-wrapper">
+<div class="videoguide-wrapper" data-displaymethod="{{displaymethod}}">
 
     {{! Barra de progreso }}
     <div class="videoguide-progress-section mb-4">
@@ -75,9 +75,11 @@
                                 {{#required}}
                                 <span class="badge badge-danger mr-2" title="{{#str}}required, mod_videoguide{{/str}}">!</span>
                                 {{/required}}
-                                <a href="{{url}}" target="_blank" class="video-link font-weight-bold">
+                                <a href="{{url}}" class="video-link font-weight-bold" data-embedurl="{{embedurl}}" data-title="{{title}}"
+                                   {{#newtab}}target="_blank" rel="noopener noreferrer"{{/newtab}}>
                                     {{title}}
-                                    <i class="fa fa-external-link ml-1" style="font-size: 0.7em;"></i>
+                                    {{#newtab}}<i class="fa fa-external-link ml-1" style="font-size: 0.7em;"></i>{{/newtab}}
+                                    {{^newtab}}<i class="fa fa-play-circle ml-1" style="font-size: 0.7em;"></i>{{/newtab}}
                                 </a>
                                 {{^enabled}}
                                 <span class="badge badge-secondary ml-2">{{#str}}hidden, mod_videoguide{{/str}}</span>

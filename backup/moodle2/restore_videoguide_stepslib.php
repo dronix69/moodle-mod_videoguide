@@ -24,7 +24,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 class restore_videoguide_activity_structure_step extends restore_activity_structure_step {
-
     protected function define_structure() {
         $paths = [];
         $userinfo = $this->get_setting_value('userinfo');
@@ -47,6 +46,9 @@ class restore_videoguide_activity_structure_step extends restore_activity_struct
         $data->course = $this->get_courseid();
         $data->timecreated = time();
         $data->timemodified = time();
+        if (!isset($data->displaymethod)) {
+            $data->displaymethod = 'newtab';
+        }
 
         $newid = $DB->insert_record('videoguide', $data);
         $this->apply_activity_instance($newid);

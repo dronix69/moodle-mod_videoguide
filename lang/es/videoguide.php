@@ -23,39 +23,48 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Guía de Videos';
+$string['addvideo'] = 'Añadir Video';
+$string['description'] = 'Descripción';
+$string['display_modal'] = 'Ventana emergente (incrustada)';
+$string['display_newtab'] = 'Nueva pestaña del navegador';
+$string['display_popup'] = 'Ventana flotante (pop-up del navegador)';
+$string['displaymethod'] = 'Método de apertura de los videos';
+$string['displaymethod_help'] = 'Elija cómo se abrirán los enlaces de video para los estudiantes:
+
+* **Nueva pestaña del navegador** – el video se abre en una pestaña nueva.
+* **Ventana emergente (modal)** – el video se abre incrustado sobre la página (solo funciona con plataformas que permiten incrustar, como YouTube).
+* **Ventana flotante** – el video se abre en una ventana emergente (pop-up) del navegador, separable y redimensionable.';
+$string['hidden'] = 'Oculto';
+$string['invalidurl'] = 'Por favor ingrese una URL válida que comience con http:// o https://';
+$string['marknotviewed'] = 'Marcar como no visto';
+$string['markviewed'] = 'Marcar como visto';
 $string['modulename'] = 'Guía de Videos';
 $string['modulenameplural'] = 'Guías de Videos';
+$string['novideos'] = 'Aún no se han añadido videos a esta guía.';
+$string['platform'] = 'Plataforma';
+$string['platform_meet'] = 'Google Meet';
+$string['platform_youtube'] = 'YouTube';
+$string['platform_zoom'] = 'Zoom';
+$string['pluginname'] = 'Guía de Videos';
+$string['privacy:metadata:videoguide_progress'] = 'Información sobre el progreso de visualización del usuario para cada video en una guía de videos.';
+$string['privacy:metadata:videoguide_progress:timemodified'] = 'La marca de tiempo de la última modificación del estado de visualización.';
+$string['privacy:metadata:videoguide_progress:userid'] = 'El ID del usuario.';
+$string['privacy:metadata:videoguide_progress:videoguideid'] = 'El ID de la instancia de la guía de videos.';
+$string['privacy:metadata:videoguide_progress:videoid'] = 'El ID del video.';
+$string['privacy:metadata:videoguide_progress:viewed'] = 'Si el video fue visto.';
+$string['required'] = 'Obligatorio';
+$string['status'] = 'Estado';
+$string['urlrequired'] = 'La URL es obligatoria cuando se proporciona un título.';
+$string['video'] = 'Video';
+$string['videodescription'] = 'Descripción';
+$string['videoguide:addinstance'] = 'Añadir instancia de guía de videos';
+$string['videoguide:managevideos'] = 'Gestionar videos en la guía';
+$string['videoguide:view'] = 'Ver guía de videos';
 $string['videoguidename'] = 'Nombre de la Guía';
 $string['videoguidename_help'] = 'Ingrese un nombre para esta guía de videos.';
 $string['videos'] = 'Videos';
-$string['addvideo'] = 'Añadir Video';
-$string['video'] = 'Video';
 $string['videotitle'] = 'Título';
 $string['videourl'] = 'URL del Video';
-$string['description'] = 'Descripción';
-$string['videodescription'] = 'Descripción';
-$string['platform'] = 'Plataforma';
-$string['platform_youtube'] = 'YouTube';
-$string['platform_zoom'] = 'Zoom';
-$string['platform_meet'] = 'Google Meet';
 $string['visibility'] = 'Visibilidad';
 $string['visible'] = 'Visible';
-$string['hidden'] = 'Oculto';
-$string['required'] = 'Obligatorio';
-$string['status'] = 'Estado';
 $string['yourprogress'] = 'Tu Progreso';
-$string['markviewed'] = 'Marcar como visto';
-$string['marknotviewed'] = 'Marcar como no visto';
-$string['novideos'] = 'Aún no se han añadido videos a esta guía.';
-$string['invalidurl'] = 'Por favor ingrese una URL válida que comience con http:// o https://';
-$string['urlrequired'] = 'La URL es obligatoria cuando se proporciona un título.';
-$string['videoguide:view'] = 'Ver guía de videos';
-$string['videoguide:addinstance'] = 'Añadir instancia de guía de videos';
-$string['videoguide:managevideos'] = 'Gestionar videos en la guía';
-$string['privacy:metadata:videoguide_progress'] = 'Información sobre el progreso de visualización del usuario para cada video en una guía de videos.';
-$string['privacy:metadata:videoguide_progress:videoguideid'] = 'El ID de la instancia de la guía de videos.';
-$string['privacy:metadata:videoguide_progress:videoid'] = 'El ID del video.';
-$string['privacy:metadata:videoguide_progress:userid'] = 'El ID del usuario.';
-$string['privacy:metadata:videoguide_progress:viewed'] = 'Si el video fue visto.';
-$string['privacy:metadata:videoguide_progress:timemodified'] = 'La marca de tiempo de la última modificación del estado de visualización.';

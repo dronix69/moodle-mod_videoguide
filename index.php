@@ -51,8 +51,11 @@ if (!empty($instanceids)) {
     [$insql, $inparams] = $DB->get_in_or_equal($instanceids, SQL_PARAMS_NAMED);
     $allguides = $DB->get_records_list('videoguide', 'id', $instanceids);
     $allvideos = $DB->get_records_select('videoguide_videos', "videoguideid $insql", $inparams);
-    $allprogress = $DB->get_records_select('videoguide_progress', "videoguideid $insql AND userid = :userid",
-        array_merge($inparams, ['userid' => $USER->id]));
+    $allprogress = $DB->get_records_select(
+        'videoguide_progress',
+        "videoguideid $insql AND userid = :userid",
+        array_merge($inparams, ['userid' => $USER->id])
+    );
 } else {
     $allguides = [];
     $allvideos = [];

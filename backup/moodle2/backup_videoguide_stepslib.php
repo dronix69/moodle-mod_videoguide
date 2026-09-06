@@ -24,10 +24,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 class backup_videoguide_activity_structure_step extends backup_activity_structure_step {
-
     protected function define_structure() {
         $videoguide = new backup_nested_element('videoguide', ['id'], [
-            'course', 'name', 'intro', 'introformat', 'timecreated', 'timemodified',
+            'course', 'name', 'intro', 'introformat', 'displaymethod', 'timecreated', 'timemodified',
         ]);
 
         $videos = new backup_nested_element('videos');

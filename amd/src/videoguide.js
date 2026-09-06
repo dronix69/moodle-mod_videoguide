@@ -21,9 +21,76 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['core/ajax', 'core/notification', 'core/config'], function(Ajax, Notification, Config) {
+define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], function(Ajax, Notification, Config, ModalFactory) {
+
+    var displaymethod = 'newtab';
+
+    /**
+     * Open the video inside an embedded modal (pop-up window over the page).
+     */
+    var openModal = function(link) {
+        var src = link.dataset.embedurl || link.href;
+        var title = link.dataset.title || '';
+
+        var iframe = document.createElement('iframe');
+        iframe.src = src;
+        iframe.className = 'videoguide-modal-iframe';
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture; encrypted-media');
+        iframe.setAttribute('allowfullscreen', '');
+
+        ModalFactory.create({
+            type: ModalFactory.types.DEFAULT,
+            title: title,
+            body: '<div class="videoguide-modal-body"></div>',
+            large: true
+        }).then(function(modal) {
+            modal.getBody()[0].firstChild.appendChild(iframe);
+            modal.show();
+            return modal;
+        }).catch(Notification.exception);
+    };
+
+    /**
+     * Open the video in a floating browser pop-up window.
+     */
+    var openPopup = function(link) {
+        var features = [
+            'width=960',
+            'height=600',
+            'left=' + Math.round((screen.width - 960) / 2),
+            'top=' + Math.round((screen.height - 600) / 2),
+            'resizable=yes',
+            'scrollbars=yes',
+            'toolbar=no',
+            'menubar=no',
+            'location=no'
+        ].join(',');
+
+        window.open(link.href, 'videoguidepopup', features);
+    };
 
     var init = function() {
+        var wrapper = document.querySelector('.videoguide-wrapper');
+        if (wrapper && wrapper.dataset.displaymethod) {
+            displaymethod = wrapper.dataset.displaymethod;
+        }
+
+        // Video link click — honour the configured opening method.
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('.video-link');
+            if (!link) {
+                return;
+            }
+            if (displaymethod === 'modal') {
+                e.preventDefault();
+                openModal(link);
+            } else if (displaymethod === 'popup') {
+                e.preventDefault();
+                openPopup(link);
+            }
+        });
+
         // Toggle viewed/not viewed — native event listener, zero jQuery.
         document.addEventListener('click', function(e) {
             var btn = e.target.closest('.toggle-view-btn');

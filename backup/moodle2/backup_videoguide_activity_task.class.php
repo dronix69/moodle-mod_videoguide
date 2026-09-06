@@ -26,7 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/videoguide/backup/moodle2/backup_videoguide_stepslib.php');
 
 class backup_videoguide_activity_task extends backup_activity_task {
-
     protected function define_my_settings() {
     }
 
@@ -34,7 +33,7 @@ class backup_videoguide_activity_task extends backup_activity_task {
         $this->add_step(new backup_videoguide_activity_structure_step('videoguide_structure', 'videoguide.xml'));
     }
 
-    static public function encode_content_links($content) {
+    public static function encode_content_links($content) {
         return $content;
     }
 }

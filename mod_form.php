@@ -26,7 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 class mod_videoguide_mod_form extends moodleform_mod {
-
     protected function definition() {
         global $DB;
 
@@ -42,6 +41,17 @@ class mod_videoguide_mod_form extends moodleform_mod {
 
         $this->standard_intro_elements();
 
+        // How videos should open for students.
+        $displaymethods = [
+            'newtab' => get_string('display_newtab', 'mod_videoguide'),
+            'modal'  => get_string('display_modal', 'mod_videoguide'),
+            'popup'  => get_string('display_popup', 'mod_videoguide'),
+        ];
+        $mform->addElement('select', 'displaymethod', get_string('displaymethod', 'mod_videoguide'), $displaymethods);
+        $mform->setType('displaymethod', PARAM_ALPHA);
+        $mform->setDefault('displaymethod', 'newtab');
+        $mform->addHelpButton('displaymethod', 'displaymethod', 'mod_videoguide');
+
         // Video section.
         $mform->addElement('header', 'videossection', get_string('videos', 'mod_videoguide'));
 
@@ -55,7 +65,7 @@ class mod_videoguide_mod_form extends moodleform_mod {
         if (empty($videos)) {
             $videos = [(object)[
                 'title' => '', 'url' => '', 'platform' => 'youtube',
-                'description' => '', 'enabled' => 1, 'required' => 0
+                'description' => '', 'enabled' => 1, 'required' => 0,
             ]];
         }
 
@@ -77,8 +87,12 @@ class mod_videoguide_mod_form extends moodleform_mod {
         $mform->addElement('html', '</div>');
 
         // Button to add more videos.
-        $mform->addElement('button', 'addvideo', get_string('addvideo', 'mod_videoguide'),
-            ['id' => 'addvideo-btn', 'class' => 'btn btn-secondary videoguide-add-video']);
+        $mform->addElement(
+            'button',
+            'addvideo',
+            get_string('addvideo', 'mod_videoguide'),
+            ['id' => 'addvideo-btn', 'class' => 'btn btn-secondary videoguide-add-video']
+        );
 
         // Pass platform options to the AMD module via data attribute on the container.
         $jsonplatforms = json_encode($platforms, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
@@ -120,8 +134,12 @@ class mod_videoguide_mod_form extends moodleform_mod {
         $mform->setDefault('video_platform[' . $index . ']', $video->platform);
 
         // Description.
-        $mform->addElement('textarea', 'video_description[' . $index . ']', get_string('videodescription', 'mod_videoguide'), 
-            ['rows' => 2, 'cols' => 50]);
+        $mform->addElement(
+            'textarea',
+            'video_description[' . $index . ']',
+            get_string('videodescription', 'mod_videoguide'),
+            ['rows' => 2, 'cols' => 50]
+        );
         $mform->setType('video_description[' . $index . ']', PARAM_TEXT);
         $mform->setDefault('video_description[' . $index . ']', $video->description);
 

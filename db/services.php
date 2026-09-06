@@ -30,6 +30,6 @@ $functions = [
         'description' => 'Toggle video viewed status',
         'type'        => 'write',
         'ajax'        => true,
-        'capabilities'=> 'mod/videoguide:view',
+        'capabilities' => 'mod/videoguide:view',
     ],
 ];

@@ -73,6 +73,9 @@ $videos = videoguide_get_videos($videoguide->id);
 $progress = videoguide_get_user_progress($videoguide->id, $USER->id);
 $canmanage = has_capability('mod/videoguide:managevideos', $context);
 
+$displaymethod = !empty($videoguide->displaymethod) &&
+    in_array($videoguide->displaymethod, videoguide_get_display_methods()) ? $videoguide->displaymethod : 'newtab';
+
 $videodata = [];
 $totalvideos = 0;
 $viewedcount = 0;
@@ -108,13 +111,14 @@ foreach ($videos as $video) {
     $toggleurl = new moodle_url('/mod/videoguide/view.php', [
         'id' => $cm->id,
         'toggle' => $video->id,
-        'sesskey' => sesskey()
+        'sesskey' => sesskey(),
     ]);
 
     $videodata[] = [
         'id' => $video->id,
         'title' => format_string($video->title),
         'url' => $video->url,
+        'embedurl' => videoguide_get_embed_url($video->url, $video->platform),
         'platform' => $video->platform,
         'platformicon' => $platformicon,
         'platformclass' => $platformclass,
@@ -122,6 +126,7 @@ foreach ($videos as $video) {
         'enabled' => $video->enabled,
         'required' => $video->required,
         'viewed' => $isviewed,
+        'newtab' => ($displaymethod === 'newtab'),
         'toggleurl' => $toggleurl->out(false),
     ];
 }
@@ -135,7 +140,8 @@ $renderable = new \mod_videoguide\output\view_page(
     $progresspercent,
     $viewedcount,
     $totalvideos,
-    $canmanage
+    $canmanage,
+    $displaymethod
 );
 
 echo $output->header();

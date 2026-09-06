@@ -26,7 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/videoguide/backup/moodle2/restore_videoguide_stepslib.php');
 
 class restore_videoguide_activity_task extends restore_activity_task {
-
     protected function define_my_settings() {
     }
 
@@ -34,19 +33,19 @@ class restore_videoguide_activity_task extends restore_activity_task {
         $this->add_step(new restore_videoguide_activity_structure_step('videoguide_structure', 'videoguide.xml'));
     }
 
-    static public function define_decode_contents() {
+    public static function define_decode_contents() {
         return [];
     }
 
-    static public function define_decode_rules() {
+    public static function define_decode_rules() {
         return [];
     }
 
-    static public function define_restore_log_rules() {
+    public static function define_restore_log_rules() {
         return [];
     }
 
-    static public function define_restore_log_rules_for_course() {
+    public static function define_restore_log_rules_for_course() {
         return [];
     }
 }

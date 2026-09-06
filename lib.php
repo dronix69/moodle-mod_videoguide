@@ -28,13 +28,20 @@ defined('MOODLE_INTERNAL') || die();
  */
 function videoguide_supports($feature) {
     switch ($feature) {
-        case FEATURE_MOD_INTRO:            return true;
-        case FEATURE_SHOW_DESCRIPTION:     return true;
-        case FEATURE_COMPLETION_TRACKS_VIEWS: return true;
-        case FEATURE_COMPLETION_HAS_RULES: return false;
-        case FEATURE_GRADE_HAS_GRADE:      return false;
-        case FEATURE_BACKUP_MOODLE2:     return true;
-        default:                           return null;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+            return false;
+        case FEATURE_GRADE_HAS_GRADE:
+            return false;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        default:
+            return null;
     }
 }
 
@@ -46,6 +53,9 @@ function videoguide_add_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timecreated = time();
     $moduleinstance->timemodified = time();
+    if (empty($moduleinstance->displaymethod) || !in_array($moduleinstance->displaymethod, videoguide_get_display_methods())) {
+        $moduleinstance->displaymethod = 'newtab';
+    }
 
     $id = $DB->insert_record('videoguide', $moduleinstance);
 
@@ -63,6 +73,9 @@ function videoguide_update_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
+    if (empty($moduleinstance->displaymethod) || !in_array($moduleinstance->displaymethod, videoguide_get_display_methods())) {
+        $moduleinstance->displaymethod = 'newtab';
+    }
 
     $DB->update_record('videoguide', $moduleinstance);
 
@@ -139,12 +152,39 @@ function videoguide_get_videos($videoguideid) {
 }
 
 /**
+ * Valid display (opening) methods for the activity.
+ */
+function videoguide_get_display_methods() {
+    return ['newtab', 'modal', 'popup'];
+}
+
+/**
+ * Build an embeddable URL for the given video, when possible.
+ *
+ * @param string $url Original video URL.
+ * @param string $platform One of: youtube, zoom, meet.
+ * @return string URL suitable for an iframe, or the original URL as fallback.
+ */
+function videoguide_get_embed_url($url, $platform) {
+    if ($platform === 'youtube') {
+        if (preg_match('~^https?://(?:www\.)?(?:youtube\.com/(?:watch\?v=|shorts/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})~', $url, $matches)) {
+            return 'https://www.youtube-nocookie.com/embed/' . $matches[1] . '?rel=0';
+        }
+    }
+    return $url;
+}
+
+/**
  * Get user progress for an instance.
  */
 function videoguide_get_user_progress($videoguideid, $userid) {
     global $DB;
-    return $DB->get_records_menu('videoguide_progress', 
-        ['videoguideid' => $videoguideid, 'userid' => $userid], '', 'videoid, viewed');
+    return $DB->get_records_menu(
+        'videoguide_progress',
+        ['videoguideid' => $videoguideid, 'userid' => $userid],
+        '',
+        'videoid, viewed'
+    );
 }
 
 /**
@@ -160,7 +200,7 @@ function videoguide_toggle_viewed($videoid, $userid) {
 
     $existing = $DB->get_record('videoguide_progress', [
         'videoid' => $videoid,
-        'userid' => $userid
+        'userid' => $userid,
     ]);
 
     if ($existing) {
