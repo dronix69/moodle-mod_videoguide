@@ -21,9 +21,20 @@
  * @copyright  2026 Daniel Ferrada
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Restore structure step for the mod_videoguide module.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class restore_videoguide_activity_structure_step extends restore_activity_structure_step {
+    /**
+     * Define the restore structure for the videoguide module.
+     *
+     * @return restore_path_element[] The restore paths.
+     */
     protected function define_structure() {
         $paths = [];
         $userinfo = $this->get_setting_value('userinfo');
@@ -38,6 +49,11 @@ class restore_videoguide_activity_structure_step extends restore_activity_struct
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * Process a restored videoguide instance.
+     *
+     * @param array $data The restored data.
+     */
     public function process_videoguide($data) {
         global $DB;
 
@@ -54,6 +70,11 @@ class restore_videoguide_activity_structure_step extends restore_activity_struct
         $this->apply_activity_instance($newid);
     }
 
+    /**
+     * Process a restored videoguide video.
+     *
+     * @param array $data The restored data.
+     */
     public function process_videoguide_video($data) {
         global $DB;
 
@@ -66,6 +87,11 @@ class restore_videoguide_activity_structure_step extends restore_activity_struct
         $this->set_mapping('videoguide_video', $oldid, $newid, true);
     }
 
+    /**
+     * Process a restored videoguide progress record.
+     *
+     * @param array $data The restored data.
+     */
     public function process_videoguide_progress($data) {
         global $DB;
 
@@ -77,6 +103,9 @@ class restore_videoguide_activity_structure_step extends restore_activity_struct
         $DB->insert_record('videoguide_progress', $data);
     }
 
+    /**
+     * After execution, add the related files.
+     */
     protected function after_execute() {
         $this->add_related_files('mod_videoguide', 'intro', null);
     }

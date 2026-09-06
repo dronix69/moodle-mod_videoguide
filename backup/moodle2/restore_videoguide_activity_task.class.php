@@ -25,26 +25,59 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/videoguide/backup/moodle2/restore_videoguide_stepslib.php');
 
+/**
+ * Restore task for the mod_videoguide module.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class restore_videoguide_activity_task extends restore_activity_task {
+    /**
+     * Define the restore settings for the activity.
+     */
     protected function define_my_settings() {
     }
 
+    /**
+     * Define the restore steps for the activity.
+     */
     protected function define_my_steps() {
         $this->add_step(new restore_videoguide_activity_structure_step('videoguide_structure', 'videoguide.xml'));
     }
 
+    /**
+     * Define the decode contents for the activity.
+     *
+     * @return array The decode contents.
+     */
     public static function define_decode_contents() {
         return [];
     }
 
+    /**
+     * Define the decode rules for the activity.
+     *
+     * @return array The decode rules.
+     */
     public static function define_decode_rules() {
         return [];
     }
 
+    /**
+     * Define the restore log rules for the activity.
+     *
+     * @return array The restore log rules.
+     */
     public static function define_restore_log_rules() {
         return [];
     }
 
+    /**
+     * Define the restore log rules for the course.
+     *
+     * @return array The restore log rules.
+     */
     public static function define_restore_log_rules_for_course() {
         return [];
     }

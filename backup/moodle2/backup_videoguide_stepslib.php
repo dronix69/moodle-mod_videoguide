@@ -21,9 +21,20 @@
  * @copyright  2026 Daniel Ferrada
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Backup structure step for the mod_videoguide module.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class backup_videoguide_activity_structure_step extends backup_activity_structure_step {
+    /**
+     * Define the backup structure for the videoguide module.
+     *
+     * @return backup_nested_element The backup structure.
+     */
     protected function define_structure() {
         $videoguide = new backup_nested_element('videoguide', ['id'], [
             'course', 'name', 'intro', 'introformat', 'displaymethod', 'timecreated', 'timemodified',

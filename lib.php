@@ -21,10 +21,12 @@
  * @copyright  2026 Daniel Ferrada
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Return the list of features supported by this module.
+ *
+ * @param string $feature The feature to check.
+ * @return bool|null Whether the feature is supported, or null if unknown.
  */
 function videoguide_supports($feature) {
     switch ($feature) {
@@ -47,6 +49,10 @@ function videoguide_supports($feature) {
 
 /**
  * Add a new videoguide instance.
+ *
+ * @param stdClass $moduleinstance The data submitted from the form.
+ * @param mod_videoguide_mod_form $mform The form object.
+ * @return int The id of the newly created instance.
  */
 function videoguide_add_instance($moduleinstance, $mform = null) {
     global $DB;
@@ -67,6 +73,10 @@ function videoguide_add_instance($moduleinstance, $mform = null) {
 
 /**
  * Update an existing instance.
+ *
+ * @param stdClass $moduleinstance The data submitted from the form.
+ * @param mod_videoguide_mod_form $mform The form object.
+ * @return bool True on success.
  */
 function videoguide_update_instance($moduleinstance, $mform = null) {
     global $DB;
@@ -87,6 +97,9 @@ function videoguide_update_instance($moduleinstance, $mform = null) {
 
 /**
  * Delete an instance.
+ *
+ * @param int $id The id of the instance to delete.
+ * @return bool True on success.
  */
 function videoguide_delete_instance($id) {
     global $DB;
@@ -104,6 +117,9 @@ function videoguide_delete_instance($id) {
 
 /**
  * Save/update videos from the form.
+ *
+ * @param int $videoguideid The id of the videoguide instance.
+ * @param stdClass $data The data submitted from the form.
  */
 function videoguide_save_videos($videoguideid, $data) {
     global $DB;
@@ -145,6 +161,9 @@ function videoguide_save_videos($videoguideid, $data) {
 
 /**
  * Get videos for an instance.
+ *
+ * @param int $videoguideid The id of the videoguide instance.
+ * @return array The list of video records.
  */
 function videoguide_get_videos($videoguideid) {
     global $DB;
@@ -167,7 +186,8 @@ function videoguide_get_display_methods() {
  */
 function videoguide_get_embed_url($url, $platform) {
     if ($platform === 'youtube') {
-        if (preg_match('~^https?://(?:www\.)?(?:youtube\.com/(?:watch\?v=|shorts/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})~', $url, $matches)) {
+        $pattern = '~^https?://(?:www\.)?(?:youtube\.com/(?:watch\?v=|shorts/|embed/)|youtu\.be/)([A-Za-z0-9_-]{11})~';
+        if (preg_match($pattern, $url, $matches)) {
             return 'https://www.youtube-nocookie.com/embed/' . $matches[1] . '?rel=0';
         }
     }
@@ -176,6 +196,10 @@ function videoguide_get_embed_url($url, $platform) {
 
 /**
  * Get user progress for an instance.
+ *
+ * @param int $videoguideid The id of the videoguide instance.
+ * @param int $userid The id of the user.
+ * @return array The list of progress records.
  */
 function videoguide_get_user_progress($videoguideid, $userid) {
     global $DB;
@@ -189,6 +213,10 @@ function videoguide_get_user_progress($videoguideid, $userid) {
 
 /**
  * Toggle video viewed status.
+ *
+ * @param int $videoid The id of the video.
+ * @param int $userid The id of the user.
+ * @return bool|int The new viewed status, or false if the video does not exist.
  */
 function videoguide_toggle_viewed($videoid, $userid) {
     global $DB;

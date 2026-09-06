@@ -21,7 +21,13 @@
  * @copyright  2026 Daniel Ferrada
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Renderer for the mod_videoguide module.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_videoguide_renderer extends plugin_renderer_base {
 }

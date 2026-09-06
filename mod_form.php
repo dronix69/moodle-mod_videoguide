@@ -25,7 +25,17 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
+/**
+ * Teacher configuration form for the mod_videoguide module.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_videoguide_mod_form extends moodleform_mod {
+    /**
+     * Defines the form elements for the activity configuration.
+     */
     protected function definition() {
         global $DB;
 
@@ -107,6 +117,11 @@ class mod_videoguide_mod_form extends moodleform_mod {
 
     /**
      * Add a video fieldset to the form.
+     *
+     * @param MoodleQuickForm $mform The form object.
+     * @param int $index The index of the video.
+     * @param stdClass $video The video data.
+     * @param array $platforms The list of available platforms.
      */
     protected function add_video_fieldset($mform, $index, $video, $platforms) {
         $fieldsetid = 'video_fieldset_' . $index;
@@ -115,7 +130,9 @@ class mod_videoguide_mod_form extends moodleform_mod {
         $mform->addElement('html', '<div class="card mb-3">');
         $mform->addElement('html', '<div class="card-header d-flex justify-content-between align-items-center">');
         $mform->addElement('html', '<span>' . get_string('video', 'mod_videoguide') . ' #' . ($index + 1) . '</span>');
-        $mform->addElement('html', '<button type="button" class="btn btn-danger btn-sm videoguide-remove-video" data-fieldset="' . $fieldsetid . '">' . get_string('remove', 'moodle') . '</button>');
+        $removebutton = '<button type="button" class="btn btn-danger btn-sm videoguide-remove-video"'
+            . ' data-fieldset="' . $fieldsetid . '">' . get_string('remove', 'moodle') . '</button>';
+        $mform->addElement('html', $removebutton);
         $mform->addElement('html', '</div>');
         $mform->addElement('html', '<div class="card-body">');
 
@@ -158,10 +175,14 @@ class mod_videoguide_mod_form extends moodleform_mod {
         $eyehtml .= '<label class="col-form-label col-sm-3">' . get_string('visibility', 'mod_videoguide') . '</label>';
         $eyehtml .= '<div class="col-sm-9">';
         $eyehtml .= '<div class="btn-group" role="group">';
-        $eyehtml .= '<input type="radio" class="btn-check" name="video_enabled[' . $index . ']" id="' . $visibleid . '" value="1" autocomplete="off" ' . $eyeon . '>';
-        $eyehtml .= '<label class="btn btn-outline-success" for="' . $visibleid . '"><i class="fa fa-eye"></i> ' . get_string('visible', 'mod_videoguide') . '</label>';
-        $eyehtml .= '<input type="radio" class="btn-check" name="video_enabled[' . $index . ']" id="' . $hiddenid . '" value="0" autocomplete="off" ' . $eyeoff . '>';
-        $eyehtml .= '<label class="btn btn-outline-secondary" for="' . $hiddenid . '"><i class="fa fa-eye-slash"></i> ' . get_string('hidden', 'mod_videoguide') . '</label>';
+        $eyehtml .= '<input type="radio" class="btn-check" name="video_enabled[' . $index . ']" id="' . $visibleid
+            . '" value="1" autocomplete="off" ' . $eyeon . '>';
+        $eyehtml .= '<label class="btn btn-outline-success" for="' . $visibleid
+            . '"><i class="fa fa-eye"></i> ' . get_string('visible', 'mod_videoguide') . '</label>';
+        $eyehtml .= '<input type="radio" class="btn-check" name="video_enabled[' . $index . ']" id="' . $hiddenid
+            . '" value="0" autocomplete="off" ' . $eyeoff . '>';
+        $eyehtml .= '<label class="btn btn-outline-secondary" for="' . $hiddenid
+            . '"><i class="fa fa-eye-slash"></i> ' . get_string('hidden', 'mod_videoguide') . '</label>';
         $eyehtml .= '</div></div></div>';
 
         $mform->addElement('html', $eyehtml);
@@ -178,6 +199,13 @@ class mod_videoguide_mod_form extends moodleform_mod {
      * Now handled via AMD module mod_videoguide/form.
      */
 
+    /**
+     * Validate the submitted form data.
+     *
+     * @param array $data The submitted data.
+     * @param array $files The submitted files.
+     * @return array The validation errors.
+     */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
 

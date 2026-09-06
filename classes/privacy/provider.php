@@ -23,8 +23,6 @@
  */
 namespace mod_videoguide\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
@@ -32,7 +30,23 @@ use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
-class provider implements \core_privacy\local\metadata\provider, \core_privacy\local\request\core_userlist_provider, \core_privacy\local\request\plugin\provider {
+/**
+ * Privacy API implementation for the mod_videoguide module.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
+    /**
+     * Get the list of metadata stored by this plugin.
+     *
+     * @param collection $collection The collection of metadata.
+     * @return collection The collection of metadata.
+     */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(
             'videoguide_progress',
@@ -48,6 +62,12 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         return $collection;
     }
 
+    /**
+     * Get the contexts where the given user has progress data.
+     *
+     * @param int $userid The user id.
+     * @return contextlist The list of contexts.
+     */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
         $sql = "SELECT ctx.id
@@ -66,6 +86,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         return $contextlist;
     }
 
+    /**
+     * Get the users who have progress data in the given context.
+     *
+     * @param userlist $userlist The user list.
+     */
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
         if ($context->contextlevel !== CONTEXT_MODULE) {
@@ -78,6 +103,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         $userlist->add_from_sql('userid', $sql, ['cmid' => $context->instanceid]);
     }
 
+    /**
+     * Export the user data for the given context list.
+     *
+     * @param approved_contextlist $contextlist The approved context list.
+     */
     public static function export_user_data(approved_contextlist $contextlist) {
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
@@ -101,6 +131,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         }
     }
 
+    /**
+     * Delete all data for all users in the given context.
+     *
+     * @param \context $context The context.
+     */
     public static function delete_data_for_all_users_in_context(\context $context) {
         if ($context->contextlevel !== CONTEXT_MODULE) {
             return;
@@ -112,6 +147,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         self::delete_progress_for_instance($cm->instance);
     }
 
+    /**
+     * Delete data for a single user.
+     *
+     * @param approved_contextlist $contextlist The approved context list.
+     */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
@@ -126,6 +166,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         }
     }
 
+    /**
+     * Delete data for multiple users.
+     *
+     * @param approved_userlist $userlist The approved user list.
+     */
     public static function delete_data_for_users(approved_userlist $userlist) {
         $context = $userlist->get_context();
         if ($context->contextlevel !== CONTEXT_MODULE) {
@@ -140,6 +185,13 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         }
     }
 
+    /**
+     * Get the progress records for a user in a videoguide instance.
+     *
+     * @param int $videoguideid The videoguide instance id.
+     * @param int $userid The user id.
+     * @return array The progress records.
+     */
     private static function get_progress_for_user(int $videoguideid, int $userid): array {
         global $DB;
         return $DB->get_records_menu(
@@ -150,11 +202,22 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         );
     }
 
+    /**
+     * Delete all progress data for a videoguide instance.
+     *
+     * @param int $videoguideid The videoguide instance id.
+     */
     private static function delete_progress_for_instance(int $videoguideid) {
         global $DB;
         $DB->delete_records('videoguide_progress', ['videoguideid' => $videoguideid]);
     }
 
+    /**
+     * Delete progress data for a user in a videoguide instance.
+     *
+     * @param int $videoguideid The videoguide instance id.
+     * @param int $userid The user id.
+     */
     private static function delete_progress_for_user(int $videoguideid, int $userid) {
         global $DB;
         $DB->delete_records('videoguide_progress', [

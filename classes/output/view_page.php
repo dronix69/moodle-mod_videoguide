@@ -23,23 +23,54 @@
  */
 namespace mod_videoguide\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
 
+/**
+ * Renderable class for the videoguide view page.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class view_page implements renderable, templatable {
+    /** @var stdClass The videoguide instance record. */
     protected $videoguide;
+    /** @var array The list of videos for the instance. */
     protected $videos;
+    /** @var int The progress percentage. */
     protected $progresspercent;
+    /** @var int The number of viewed videos. */
     protected $viewedcount;
+    /** @var int The total number of videos. */
     protected $totalvideos;
+    /** @var bool Whether the user can manage videos. */
     protected $canmanage;
+    /** @var string The display method. */
     protected $displaymethod;
 
-    public function __construct($videoguide, $videos, $progresspercent, $viewedcount, $totalvideos, $canmanage, $displaymethod = 'newtab') {
+    /**
+     * Constructor.
+     *
+     * @param stdClass $videoguide The videoguide instance record.
+     * @param array $videos The list of videos for the instance.
+     * @param int $progresspercent The progress percentage.
+     * @param int $viewedcount The number of viewed videos.
+     * @param int $totalvideos The total number of videos.
+     * @param bool $canmanage Whether the user can manage videos.
+     * @param string $displaymethod The display method.
+     */
+    public function __construct(
+        $videoguide,
+        $videos,
+        $progresspercent,
+        $viewedcount,
+        $totalvideos,
+        $canmanage,
+        $displaymethod = 'newtab'
+    ) {
         $this->videoguide = $videoguide;
         $this->videos = $videos;
         $this->progresspercent = $progresspercent;
@@ -49,6 +80,12 @@ class view_page implements renderable, templatable {
         $this->displaymethod = $displaymethod;
     }
 
+    /**
+     * Export the data for the template.
+     *
+     * @param renderer_base $output The renderer.
+     * @return stdClass The data for the template.
+     */
     public function export_for_template(renderer_base $output) {
         $data = new stdClass();
         $data->name = format_string($this->videoguide->name);
