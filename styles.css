@@ -1,0 +1,237 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Styles for mod_videoguide.
+ *
+ * @package    mod_videoguide
+ * @copyright  2026 Daniel Ferrada
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+.videoguide-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* Barra de progreso */
+.videoguide-progress-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    border-radius: 12px;
+    color: white;
+}
+
+.videoguide-progress-section h5 {
+    color: white;
+    font-weight: 600;
+}
+
+.videoguide-progress-section .badge {
+    font-size: 1rem;
+    padding: 8px 15px;
+}
+
+.progress {
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Tabla de videos */
+.videoguide-table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.videoguide-table thead th {
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: 15px;
+}
+
+.videoguide-table tbody tr {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.videoguide-table tbody tr:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.videoguide-table tbody td {
+    border: none;
+    padding: 15px;
+    vertical-align: middle;
+}
+
+/* Filas vistas */
+.viewed-row {
+    background-color: #f0fff4 !important;
+}
+
+.viewed-row .video-link {
+    color: #28a745;
+}
+
+/* Filas deshabilitadas */
+.disabled-row {
+    opacity: 0.6;
+}
+
+.disabled-row .video-link {
+    color: #6c757d;
+    pointer-events: none;
+}
+
+/* Animación de entrada para filas (evita jQuery animate que rompe Event.prototype en Moodle 4) */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.videoguide-table tbody tr.fade-in-row {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+.videoguide-table tbody tr.fade-in-row:nth-child(1) { animation-delay: 0s; }
+.videoguide-table tbody tr.fade-in-row:nth-child(2) { animation-delay: 0.1s; }
+.videoguide-table tbody tr.fade-in-row:nth-child(3) { animation-delay: 0.2s; }
+.videoguide-table tbody tr.fade-in-row:nth-child(4) { animation-delay: 0.3s; }
+.videoguide-table tbody tr.fade-in-row:nth-child(5) { animation-delay: 0.4s; }
+
+/* Botón de toggle visto */
+.toggle-view-btn {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.toggle-view-btn:hover {
+    transform: scale(1.1);
+}
+
+.toggle-view-btn.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Badge de plataforma */
+.platform-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.platform-youtube {
+    background-color: #ff0000;
+    color: white;
+}
+
+.platform-zoom {
+    background-color: #2d8cff;
+    color: white;
+}
+
+.platform-meet {
+    background-color: #00832d;
+    color: white;
+}
+
+/* Icono de ojo (profesor) */
+.eye-icon {
+    display: inline-block;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.eye-icon.active {
+    background-color: #d4edda;
+}
+
+.eye-icon.inactive {
+    background-color: #f8f9fa;
+}
+
+/* Enlaces de video */
+.video-link {
+    color: #495057;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.video-link:hover {
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Formulario del profesor */
+.videoguide-video-item .card {
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.videoguide-video-item .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+}
+
+.videoguide-video-item .card-body {
+    padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .videoguide-table-container {
+        font-size: 0.9rem;
+    }
+
+    .platform-badge span {
+        display: none;
+    }
+
+    .videoguide-progress-section h5 {
+        font-size: 1rem;
+    }
+}

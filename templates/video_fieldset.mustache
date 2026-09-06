@@ -1,0 +1,79 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Video fieldset template for mod_videoguide form.
+
+    @package    mod_videoguide
+    @copyright  2026 Daniel Ferrada
+    @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+<div class="videoguide-video-item" id="video_fieldset_{{index}}">
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>{{#str}}video, mod_videoguide{{/str}} #{{index_plus_one}}</span>
+            <button type="button" class="btn btn-danger btn-sm videoguide-remove-video" data-fieldset="video_fieldset_{{index}}">{{#str}}remove, moodle{{/str}}</button>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">{{#str}}videotitle, mod_videoguide{{/str}}</label>
+                <div class="col-sm-9">
+                    <input type="text" name="video_title[{{index}}]" class="form-control" value="">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">{{#str}}videourl, mod_videoguide{{/str}}</label>
+                <div class="col-sm-9">
+                    <input type="text" name="video_url[{{index}}]" class="form-control" value="">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">{{#str}}platform, mod_videoguide{{/str}}</label>
+                <div class="col-sm-9">
+                    <select name="video_platform[{{index}}]" class="form-control">
+                        {{#platforms}}
+                        <option value="{{key}}">{{label}}</option>
+                        {{/platforms}}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">{{#str}}videodescription, mod_videoguide{{/str}}</label>
+                <div class="col-sm-9">
+                    <textarea name="video_description[{{index}}]" class="form-control" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">{{#str}}visibility, mod_videoguide{{/str}}</label>
+                <div class="col-sm-9">
+                    <div class="btn-group" role="group">
+                        <input type="radio" class="btn-check" name="video_enabled[{{index}}]" id="video_enabled_{{index}}_visible" value="1" autocomplete="off" checked>
+                        <label class="btn btn-outline-success" for="video_enabled_{{index}}_visible"><i class="fa fa-eye"></i> {{#str}}visible, mod_videoguide{{/str}}</label>
+                        <input type="radio" class="btn-check" name="video_enabled[{{index}}]" id="video_enabled_{{index}}_hidden" value="0" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="video_enabled_{{index}}_hidden"><i class="fa fa-eye-slash"></i> {{#str}}hidden, mod_videoguide{{/str}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">{{#str}}required, mod_videoguide{{/str}}</label>
+                <div class="col-sm-9">
+                    <div class="form-check">
+                        <input type="checkbox" name="video_required[{{index}}]" class="form-check-input" value="1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
