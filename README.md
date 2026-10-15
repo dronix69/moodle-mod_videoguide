@@ -36,8 +36,10 @@ That makes Video Guide a practical way to turn recorded classes into **content f
 
 When a student opens the guide they see a friendly list of the videos, with:
 
-- a **progress bar** showing how many of the videos they have already watched,
+- a **progress bar** showing how many of the videos they have already watched, updated instantly when they tick a video (no page reload),
 - a **check button** next to each video to mark it as watched (or unwatch it by mistake),
+- **filters** to show *all*, *pending* or *required* videos, plus a quick **search** by title or description,
+- a counter of **required videos still pending**, so they always know what is left to do,
 - clear **platform badges** (YouTube, Zoom, Google Meet) so they know what to expect,
 - a small **exclamation mark** on the videos their teacher marked as required.
 

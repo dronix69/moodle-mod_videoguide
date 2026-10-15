@@ -124,38 +124,55 @@ function videoguide_delete_instance($id) {
 function videoguide_save_videos($videoguideid, $data) {
     global $DB;
 
-    $DB->delete_records('videoguide_videos', ['videoguideid' => $videoguideid]);
+    $titles       = isset($data->video_title) ? (array) $data->video_title : [];
+    $ids          = isset($data->video_id) ? (array) $data->video_id : [];
+    $urls         = isset($data->video_url) ? (array) $data->video_url : [];
+    $platforms    = isset($data->video_platform) ? (array) $data->video_platform : [];
+    $descriptions = isset($data->video_description) ? (array) $data->video_description : [];
+    $enableds     = isset($data->video_enabled) ? (array) $data->video_enabled : [];
+    $requireds    = isset($data->video_required) ? (array) $data->video_required : [];
 
-    $titles = optional_param_array('video_title', [], PARAM_TEXT);
-    $urls = optional_param_array('video_url', [], PARAM_URL);
-    $platforms = optional_param_array('video_platform', [], PARAM_TEXT);
-    $descriptions = optional_param_array('video_description', [], PARAM_TEXT);
-    $enableds = optional_param_array('video_enabled', [], PARAM_INT);
-    $requireds = optional_param_array('video_required', [], PARAM_INT);
+    // Existing videos, keyed by id, so we can preserve ids and student progress.
+    $existing = $DB->get_records('videoguide_videos', ['videoguideid' => $videoguideid], '', 'id');
+    $kept = [];
+    $sortorder = 0;
 
-    if (empty($titles)) {
-        return;
-    }
-
-    $count = count($titles);
-
-    for ($i = 0; $i < $count; $i++) {
-        if (empty($titles[$i])) {
+    foreach ($titles as $index => $title) {
+        $title = trim((string) $title);
+        if ($title === '') {
             continue;
         }
 
+        $videoid = isset($ids[$index]) ? (int) $ids[$index] : 0;
+
         $video = new stdClass();
         $video->videoguideid = $videoguideid;
-        $video->title        = $titles[$i];
-        $video->url          = $urls[$i] ?? '';
-        $video->platform     = $platforms[$i] ?? 'youtube';
-        $video->description  = $descriptions[$i] ?? '';
-        $video->enabled      = (isset($enableds[$i]) && $enableds[$i] == 1) ? 1 : 0;
-        $video->required     = (isset($requireds[$i]) && $requireds[$i] == 1) ? 1 : 0;
-        $video->sortorder    = $i;
-        $video->timecreated  = time();
+        $video->title        = $title;
+        $video->url          = (string) ($urls[$index] ?? '');
+        $video->platform     = (string) ($platforms[$index] ?? 'youtube');
+        $video->description  = (string) ($descriptions[$index] ?? '');
+        $video->enabled      = !empty($enableds[$index]) ? 1 : 0;
+        $video->required     = !empty($requireds[$index]) ? 1 : 0;
+        $video->sortorder    = $sortorder++;
 
-        $DB->insert_record('videoguide_videos', $video);
+        if ($videoid && isset($existing[$videoid])) {
+            // Update in place: the video id is preserved and progress is kept.
+            $video->id = $videoid;
+            $DB->update_record('videoguide_videos', $video);
+            $kept[$videoid] = true;
+        } else {
+            $video->timecreated = time();
+            $newid = $DB->insert_record('videoguide_videos', $video);
+            $kept[$newid] = true;
+        }
+    }
+
+    // Remove videos the teacher deleted, along with their progress records.
+    foreach ($existing as $videoid => $unused) {
+        if (!isset($kept[$videoid])) {
+            $DB->delete_records('videoguide_progress', ['videoid' => $videoid]);
+            $DB->delete_records('videoguide_videos', ['id' => $videoid]);
+        }
     }
 }
 

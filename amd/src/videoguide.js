@@ -24,6 +24,9 @@
 define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], function(Ajax, Notification, Config, ModalFactory) {
 
     var displaymethod = 'newtab';
+    var wrapper = null;
+    var activeFilter = 'all';
+    var searchTerm = '';
 
     /**
      * Open the video inside an embedded modal (pop-up window over the page).
@@ -74,8 +77,136 @@ define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], 
         window.open(link.href, 'videoguidepopup', features);
     };
 
+    /**
+     * All video rows currently rendered in the guide.
+     *
+     * @return {Array} List of row elements.
+     */
+    var getRows = function() {
+        if (!wrapper) {
+            return [];
+        }
+        return Array.prototype.slice.call(wrapper.querySelectorAll('tr.videoguide-row'));
+    };
+
+    /**
+     * Recompute the progress bar, counters and required-pending badge from the DOM.
+     */
+    var updateProgress = function() {
+        var rows = getRows();
+        var total = rows.length;
+        var viewed = 0;
+        var requiredpending = 0;
+
+        rows.forEach(function(row) {
+            if (row.dataset.viewed === '1') {
+                viewed++;
+            } else if (row.dataset.required === '1') {
+                requiredpending++;
+            }
+        });
+
+        var percent = total > 0 ? Math.round((viewed / total) * 100) : 0;
+
+        var bar = document.getElementById('videoguide-progress-bar');
+        if (bar) {
+            bar.style.width = percent + '%';
+            bar.setAttribute('aria-valuenow', percent);
+        }
+
+        var percentel = document.getElementById('videoguide-progress-percent');
+        if (percentel) {
+            percentel.textContent = percent + '%';
+        }
+
+        var viewedel = document.getElementById('videoguide-viewed-count');
+        if (viewedel) {
+            viewedel.textContent = viewed;
+        }
+
+        var totalel = document.getElementById('videoguide-total-count');
+        if (totalel) {
+            totalel.textContent = total;
+        }
+
+        var countel = document.getElementById('videoguide-required-count');
+        if (countel) {
+            countel.textContent = requiredpending;
+        }
+
+        var badge = document.getElementById('videoguide-required-badge');
+        if (badge) {
+            badge.classList.toggle('d-none', requiredpending === 0);
+        }
+    };
+
+    /**
+     * Apply the active filter and search term to the video rows.
+     */
+    var applyFilter = function() {
+        var rows = getRows();
+        var visible = 0;
+
+        rows.forEach(function(row) {
+            var matches = true;
+            var term = searchTerm.toLowerCase();
+
+            if (activeFilter === 'pending') {
+                matches = row.dataset.viewed !== '1';
+            } else if (activeFilter === 'required') {
+                matches = row.dataset.required === '1';
+            }
+
+            if (matches && term !== '') {
+                matches = (row.dataset.search || '').toLowerCase().indexOf(term) !== -1;
+            }
+
+            row.style.display = matches ? '' : 'none';
+            if (matches) {
+                visible++;
+            }
+        });
+
+        var noresults = document.getElementById('videoguide-no-results');
+        if (noresults) {
+            noresults.classList.toggle('d-none', visible > 0);
+        }
+    };
+
+    /**
+     * Update a single toggle button and its row after a successful AJAX toggle.
+     *
+     * @param {HTMLElement} btn The toggle button.
+     * @param {HTMLElement} row The video row.
+     * @param {Boolean} viewed The new viewed status.
+     */
+    var applyToggleState = function(btn, row, viewed) {
+        var icon = btn.querySelector('i');
+
+        if (viewed) {
+            btn.classList.remove('btn-outline-secondary');
+            btn.classList.add('btn-success');
+            if (icon) {
+                icon.classList.remove('fa-circle-o');
+                icon.classList.add('fa-check-circle');
+            }
+            row.classList.add('table-success', 'viewed-row');
+        } else {
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-secondary');
+            if (icon) {
+                icon.classList.remove('fa-check-circle');
+                icon.classList.add('fa-circle-o');
+            }
+            row.classList.remove('table-success', 'viewed-row');
+        }
+
+        btn.setAttribute('aria-pressed', viewed ? 'true' : 'false');
+        row.dataset.viewed = viewed ? '1' : '0';
+    };
+
     var init = function() {
-        var wrapper = document.querySelector('.videoguide-wrapper');
+        wrapper = document.querySelector('.videoguide-wrapper');
         if (wrapper && wrapper.dataset.displaymethod) {
             displaymethod = wrapper.dataset.displaymethod;
         }
@@ -86,9 +217,14 @@ define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], 
             if (!link) {
                 return;
             }
-            if (displaymethod === 'modal') {
+            var canembed = (link.closest('tr') && link.closest('tr').dataset.canembed === '1');
+            if (displaymethod === 'modal' && canembed) {
                 e.preventDefault();
                 openModal(link);
+            } else if (displaymethod === 'modal') {
+                // Platforms that cannot be embedded (Zoom, Meet) fall back to a new tab.
+                e.preventDefault();
+                window.open(link.href, '_blank', 'noopener');
             } else if (displaymethod === 'popup') {
                 e.preventDefault();
                 openPopup(link);
@@ -104,6 +240,7 @@ define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], 
             e.preventDefault();
             var videoid = btn.dataset.videoid;
             var row = btn.closest('tr');
+            btn.disabled = true;
 
             // AJAX call to toggle viewed status.
             Ajax.call([{
@@ -113,33 +250,46 @@ define(['core/ajax', 'core/notification', 'core/config', 'core/modal_factory'], 
                     sesskey: Config.sesskey
                 }
             }])[0].done(function(response) {
-                if (response.viewed) {
-                    btn.classList.remove('btn-outline-secondary');
-                    btn.classList.add('btn-success');
-                    btn.querySelector('i').classList.remove('fa-circle-o');
-                    btn.querySelector('i').classList.add('fa-check-circle');
-                    row.classList.add('table-success', 'viewed-row');
-                } else {
-                    btn.classList.remove('btn-success');
-                    btn.classList.add('btn-outline-secondary');
-                    btn.querySelector('i').classList.remove('fa-check-circle');
-                    btn.querySelector('i').classList.add('fa-circle-o');
-                    row.classList.remove('table-success', 'viewed-row');
-                }
-
-                // Reload page to update progress bar.
-                location.reload();
-
+                applyToggleState(btn, row, !!response.viewed);
+                updateProgress();
+                applyFilter();
             }).fail(function(error) {
                 Notification.exception(error);
+            }).always(function() {
+                btn.disabled = false;
             });
         });
 
-        // Animación de entrada para filas (CSS transitions, zero jQuery)
-        var rows = document.querySelectorAll('.videoguide-table tbody tr');
-        for (var i = 0; i < rows.length; i++) {
-            rows[i].classList.add('fade-in-row');
+        // Filter buttons.
+        document.addEventListener('click', function(e) {
+            var filter = e.target.closest('.videoguide-filters [data-filter]');
+            if (!filter) {
+                return;
+            }
+            activeFilter = filter.dataset.filter;
+            var buttons = document.querySelectorAll('.videoguide-filters [data-filter]');
+            Array.prototype.forEach.call(buttons, function(button) {
+                var isactive = button === filter;
+                button.classList.toggle('active', isactive);
+                button.setAttribute('aria-pressed', isactive ? 'true' : 'false');
+            });
+            applyFilter();
+        });
+
+        // Search box.
+        var search = document.getElementById('videoguide-search');
+        if (search) {
+            search.addEventListener('input', function() {
+                searchTerm = search.value || '';
+                applyFilter();
+            });
         }
+
+        // Animación de entrada para filas (CSS transitions, zero jQuery)
+        var rows = getRows();
+        rows.forEach(function(row) {
+            row.classList.add('fade-in-row');
+        });
     };
 
     return {

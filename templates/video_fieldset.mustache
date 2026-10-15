@@ -41,6 +41,7 @@
             <button type="button" class="btn btn-danger btn-sm videoguide-remove-video" data-fieldset="video_fieldset_{{index}}">{{#str}}remove, moodle{{/str}}</button>
         </div>
         <div class="card-body">
+            <input type="hidden" name="video_id[{{index}}]" value="0">
             <div class="form-group row">
                 <label class="col-form-label col-sm-3">{{#str}}videotitle, mod_videoguide{{/str}}</label>
                 <div class="col-sm-9">

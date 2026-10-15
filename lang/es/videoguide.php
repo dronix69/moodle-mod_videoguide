@@ -25,6 +25,10 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['addvideo'] = 'Añadir Video';
 $string['description'] = 'Descripción';
+$string['filterall'] = 'Todos';
+$string['filterpending'] = 'Pendientes';
+$string['filterrequired'] = 'Obligatorios';
+$string['filtervideos'] = 'Filtrar videos';
 $string['display_modal'] = 'Ventana emergente (incrustada)';
 $string['display_newtab'] = 'Nueva pestaña del navegador';
 $string['display_popup'] = 'Ventana flotante (pop-up del navegador)';
@@ -35,12 +39,14 @@ $string['displaymethod_help'] = 'Elija cómo se abrirán los enlaces de video pa
 * **Ventana emergente (modal)** – el video se abre incrustado sobre la página (solo funciona con plataformas que permiten incrustar, como YouTube).
 * **Ventana flotante** – el video se abre en una ventana emergente (pop-up) del navegador, separable y redimensionable.';
 $string['hidden'] = 'Oculto';
+$string['hiddenvideo'] = 'Este video no está disponible.';
 $string['invalidurl'] = 'Por favor ingrese una URL válida que comience con http:// o https://';
 $string['marknotviewed'] = 'Marcar como no visto';
 $string['markviewed'] = 'Marcar como visto';
 $string['modulename'] = 'Guía de Videos';
 $string['modulenameplural'] = 'Guías de Videos';
 $string['novideos'] = 'Aún no se han añadido videos a esta guía.';
+$string['novideosmatch'] = 'Ningún video coincide con los filtros.';
 $string['platform'] = 'Plataforma';
 $string['platform_meet'] = 'Google Meet';
 $string['platform_youtube'] = 'YouTube';
@@ -53,6 +59,8 @@ $string['privacy:metadata:videoguide_progress:videoguideid'] = 'El ID de la inst
 $string['privacy:metadata:videoguide_progress:videoid'] = 'El ID del video.';
 $string['privacy:metadata:videoguide_progress:viewed'] = 'Si el video fue visto.';
 $string['required'] = 'Obligatorio';
+$string['requiredpending'] = 'obligatorios pendientes';
+$string['searchvideos'] = 'Buscar videos…';
 $string['status'] = 'Estado';
 $string['urlrequired'] = 'La URL es obligatoria cuando se proporciona un título.';
 $string['video'] = 'Video';
@@ -64,6 +72,7 @@ $string['videoguidename'] = 'Nombre de la Guía';
 $string['videoguidename_help'] = 'Ingrese un nombre para esta guía de videos.';
 $string['videos'] = 'Videos';
 $string['videotitle'] = 'Título';
+$string['videonumber'] = '#';
 $string['videourl'] = 'URL del Video';
 $string['visibility'] = 'Visibilidad';
 $string['visible'] = 'Visible';

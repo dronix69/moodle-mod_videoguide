@@ -30,15 +30,18 @@
         "viewedcount": 1,
         "totalvideos": 3,
         "progresspercent": 33,
+        "requiredpending": 1,
         "hasvideos": true,
         "canmanage": false,
         "videos": [
             {
                 "id": 1,
+                "number": 1,
                 "viewed": true,
                 "enabled": true,
                 "required": true,
                 "newtab": true,
+                "canembed": true,
                 "url": "https://www.youtube.com/watch?v=abc",
                 "embedurl": "https://www.youtube-nocookie.com/embed/abc",
                 "title": "Introduction",
@@ -53,22 +56,44 @@
 <div class="videoguide-wrapper" data-displaymethod="{{displaymethod}}">
 
     {{! Barra de progreso }}
-    <div class="videoguide-progress-section mb-4">
+    <div class="videoguide-progress-section mb-4" data-total="{{totalvideos}}">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h5 class="mb-0">{{#str}}yourprogress, mod_videoguide{{/str}}</h5>
-            <span class="badge badge-primary">{{viewedcount}} / {{totalvideos}}</span>
+            <span class="d-flex align-items-center">
+                <span id="videoguide-required-badge" class="badge badge-warning mr-2 {{^requiredpending}}d-none{{/requiredpending}}" title="{{#str}}requiredpending, mod_videoguide{{/str}}">
+                    <i class="fa fa-exclamation-circle mr-1"></i><span id="videoguide-required-count">{{requiredpending}}</span>
+                </span>
+                <span class="badge badge-primary"><span id="videoguide-viewed-count">{{viewedcount}}</span> / <span id="videoguide-total-count">{{totalvideos}}</span></span>
+            </span>
         </div>
         <div class="progress" style="height: 25px;">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-                 role="progressbar" 
-                 style="width: {{progresspercent}}%" 
-                 aria-valuenow="{{progresspercent}}" 
-                 aria-valuemin="0" 
+            <div id="videoguide-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                 role="progressbar"
+                 style="width: {{progresspercent}}%"
+                 aria-valuenow="{{progresspercent}}"
+                 aria-valuemin="0"
                  aria-valuemax="100">
-                {{progresspercent}}%
+                <span id="videoguide-progress-percent">{{progresspercent}}%</span>
             </div>
         </div>
     </div>
+
+    {{! Barra de filtros (solo estudiantes) }}
+    {{#hasvideos}}
+    <div class="videoguide-toolbar mb-3" role="group" aria-label="{{#str}}filtervideos, mod_videoguide{{/str}}">
+        <div class="btn-group btn-group-sm videoguide-filters" role="group">
+            <button type="button" class="btn btn-outline-secondary active" data-filter="all" aria-pressed="true">{{#str}}filterall, mod_videoguide{{/str}}</button>
+            <button type="button" class="btn btn-outline-secondary" data-filter="pending" aria-pressed="false">{{#str}}filterpending, mod_videoguide{{/str}}</button>
+            <button type="button" class="btn btn-outline-secondary" data-filter="required" aria-pressed="false">{{#str}}filterrequired, mod_videoguide{{/str}}</button>
+        </div>
+        <div class="videoguide-search">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div>
+                <input type="search" id="videoguide-search" class="form-control" placeholder="{{#str}}searchvideos, mod_videoguide{{/str}}" aria-label="{{#str}}searchvideos, mod_videoguide{{/str}}">
+            </div>
+        </div>
+    </div>
+    {{/hasvideos}}
 
     {{! Tabla de videos }}
     {{#hasvideos}}
@@ -77,7 +102,8 @@
             <table class="table table-hover videoguide-table">
                 <thead class="thead-dark">
                     <tr>
-                        <th style="width: 50px;">{{#str}}status, mod_videoguide{{/str}}</th>
+                        <th style="width: 50px;">{{#str}}videonumber, mod_videoguide{{/str}}</th>
+                        <th style="width: 70px;">{{#str}}status, mod_videoguide{{/str}}</th>
                         <th>{{#str}}video, mod_videoguide{{/str}}</th>
                         <th style="width: 120px;">{{#str}}platform, mod_videoguide{{/str}}</th>
                         <th>{{#str}}description, mod_videoguide{{/str}}</th>
@@ -88,14 +114,24 @@
                 </thead>
                 <tbody>
                     {{#videos}}
-                    <tr class="{{#viewed}}table-success viewed-row{{/viewed}} {{^enabled}}table-secondary disabled-row{{/enabled}}" data-videoid="{{id}}">
+                    <tr class="videoguide-row {{#viewed}}table-success viewed-row{{/viewed}} {{^enabled}}table-secondary disabled-row{{/enabled}}"
+                        data-videoid="{{id}}"
+                        data-viewed="{{#viewed}}1{{/viewed}}{{^viewed}}0{{/viewed}}"
+                        data-required="{{#required}}1{{/required}}{{^required}}0{{/required}}"
+                        data-canembed="{{#canembed}}1{{/canembed}}{{^canembed}}0{{/canembed}}"
+                        data-search="{{title}} {{description}}">
+
+                        {{! Número de orden }}
+                        <td class="text-center text-muted">{{number}}</td>
 
                         {{! Columna de estado (check para estudiante) }}
                         <td class="text-center">
-                            <button class="btn btn-sm toggle-view-btn {{#viewed}}btn-success{{/viewed}}{{^viewed}}btn-outline-secondary{{/viewed}}" 
+                            <button class="btn btn-sm toggle-view-btn {{#viewed}}btn-success{{/viewed}}{{^viewed}}btn-outline-secondary{{/viewed}}"
                                     data-videoid="{{id}}"
+                                    aria-pressed="{{#viewed}}true{{/viewed}}{{^viewed}}false{{/viewed}}"
+                                    aria-label="{{#viewed}}{{#str}}marknotviewed, mod_videoguide{{/str}}{{/viewed}}{{^viewed}}{{#str}}markviewed, mod_videoguide{{/str}}{{/viewed}}"
                                     title="{{#viewed}}{{#str}}marknotviewed, mod_videoguide{{/str}}{{/viewed}}{{^viewed}}{{#str}}markviewed, mod_videoguide{{/str}}{{/viewed}}">
-                                <i class="fa {{#viewed}}fa-check-circle{{/viewed}}{{^viewed}}fa-circle-o{{/viewed}}"></i>
+                                <i class="fa {{#viewed}}fa-check-circle{{/viewed}}{{^viewed}}fa-circle-o{{/viewed}}" aria-hidden="true"></i>
                             </button>
                         </td>
 
@@ -147,6 +183,9 @@
                     {{/videos}}
                 </tbody>
             </table>
+        </div>
+        <div id="videoguide-no-results" class="alert alert-info d-none">
+            <i class="fa fa-info-circle"></i> {{#str}}novideosmatch, mod_videoguide{{/str}}
         </div>
     </div>
     {{/hasvideos}}

@@ -250,10 +250,39 @@
     background: #000;
 }
 
+/* Barra de filtros y búsqueda */
+.videoguide-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.videoguide-filters .btn.active {
+    background-color: #495057;
+    border-color: #495057;
+    color: #fff;
+}
+
+.videoguide-search {
+    flex: 1 1 220px;
+    max-width: 320px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .videoguide-table-container {
         font-size: 0.9rem;
+    }
+
+    .videoguide-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .videoguide-search {
+        max-width: none;
     }
 
     .platform-badge span {

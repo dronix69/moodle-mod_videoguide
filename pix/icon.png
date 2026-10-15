@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Fondo del icono -->
+  <rect x="1" y="1" width="30" height="30" rx="4" ry="4" fill="#e74c3c" stroke="#c0392b" stroke-width="1"/>
+  
+  <!-- Triángulo de play (izquierda) -->
+  <polygon points="8,6 8,26 20,16" fill="white"/>
+  
+  <!-- Líneas de lista/guía (derecha) -->
+  <rect x="22" y="8" width="6" height="2" rx="1" fill="white" opacity="0.9"/>
+  <rect x="22" y="13" width="6" height="2" rx="1" fill="white" opacity="0.9"/>
+  <rect x="22" y="18" width="6" height="2" rx="1" fill="white" opacity="0.9"/>
+  <rect x="22" y="23" width="4" height="2" rx="1" fill="white" opacity="0.9"/>
+</svg>

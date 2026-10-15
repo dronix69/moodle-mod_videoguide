@@ -136,6 +136,10 @@ class mod_videoguide_mod_form extends moodleform_mod {
         $mform->addElement('html', '</div>');
         $mform->addElement('html', '<div class="card-body">');
 
+        // Hidden id: 0 for brand-new videos, the existing id when editing.
+        $mform->addElement('hidden', 'video_id[' . $index . ']', $video->id ?? 0);
+        $mform->setType('video_id[' . $index . ']', PARAM_INT);
+
         // Title.
         $mform->addElement('text', 'video_title[' . $index . ']', get_string('videotitle', 'mod_videoguide'));
         $mform->setType('video_title[' . $index . ']', PARAM_TEXT);

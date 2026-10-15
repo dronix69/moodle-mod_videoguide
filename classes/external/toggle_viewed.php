@@ -77,6 +77,11 @@ class toggle_viewed extends external_api {
         self::validate_context($context);
         require_capability('mod/videoguide:view', $context);
 
+        // Students cannot toggle hidden videos (they are not part of their guide).
+        if (!$video->enabled && !has_capability('mod/videoguide:managevideos', $context)) {
+            throw new \moodle_exception('hiddenvideo', 'mod_videoguide');
+        }
+
         $result = videoguide_toggle_viewed($params['videoid'], $USER->id);
 
         return ['viewed' => (int) $result];

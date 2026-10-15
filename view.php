@@ -29,7 +29,6 @@ global $DB, $USER, $PAGE, $SITE;
 
 $id = optional_param('id', 0, PARAM_INT);
 $v  = optional_param('v', 0, PARAM_INT);
-$toggle = optional_param('toggle', 0, PARAM_INT);
 
 if ($id) {
     $cm = get_coursemodule_from_id('videoguide', $id, 0, false, MUST_EXIST);
@@ -46,12 +45,6 @@ if ($id) {
 require_login($course, true, $cm);
 $context = context_module::instance($cm->id);
 require_capability('mod/videoguide:view', $context);
-
-if ($toggle && confirm_sesskey()) {
-    $result = videoguide_toggle_viewed($toggle, $USER->id);
-    echo json_encode(['status' => 'success', 'viewed' => $result]);
-    exit;
-}
 
 $PAGE->set_url('/mod/videoguide/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($videoguide->name));
@@ -79,6 +72,7 @@ $displaymethod = !empty($videoguide->displaymethod) &&
 $videodata = [];
 $totalvideos = 0;
 $viewedcount = 0;
+$requiredpending = 0;
 
 foreach ($videos as $video) {
     if (!$canmanage && !$video->enabled) {
@@ -88,6 +82,9 @@ foreach ($videos as $video) {
     $isviewed = !empty($progress[$video->id]);
     if ($isviewed) {
         $viewedcount++;
+    }
+    if (!empty($video->required) && !$isviewed) {
+        $requiredpending++;
     }
     $totalvideos++;
 
@@ -108,17 +105,17 @@ foreach ($videos as $video) {
             break;
     }
 
-    $toggleurl = new moodle_url('/mod/videoguide/view.php', [
-        'id' => $cm->id,
-        'toggle' => $video->id,
-        'sesskey' => sesskey(),
-    ]);
+    $embedurl = videoguide_get_embed_url($video->url, $video->platform);
+    // Only offer the embedded modal when the platform actually allows embedding.
+    $canembed = ($embedurl !== $video->url);
 
     $videodata[] = [
         'id' => $video->id,
+        'number' => $totalvideos,
         'title' => format_string($video->title),
         'url' => $video->url,
-        'embedurl' => videoguide_get_embed_url($video->url, $video->platform),
+        'embedurl' => $embedurl,
+        'canembed' => $canembed,
         'platform' => $video->platform,
         'platformicon' => $platformicon,
         'platformclass' => $platformclass,
@@ -127,7 +124,6 @@ foreach ($videos as $video) {
         'required' => $video->required,
         'viewed' => $isviewed,
         'newtab' => ($displaymethod === 'newtab'),
-        'toggleurl' => $toggleurl->out(false),
     ];
 }
 
@@ -141,7 +137,8 @@ $renderable = new \mod_videoguide\output\view_page(
     $viewedcount,
     $totalvideos,
     $canmanage,
-    $displaymethod
+    $displaymethod,
+    $requiredpending
 );
 
 echo $output->header();

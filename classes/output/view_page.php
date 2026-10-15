@@ -50,6 +50,8 @@ class view_page implements renderable, templatable {
     protected $canmanage;
     /** @var string The display method. */
     protected $displaymethod;
+    /** @var int Number of required videos still pending. */
+    protected $requiredpending;
 
     /**
      * Constructor.
@@ -61,6 +63,7 @@ class view_page implements renderable, templatable {
      * @param int $totalvideos The total number of videos.
      * @param bool $canmanage Whether the user can manage videos.
      * @param string $displaymethod The display method.
+     * @param int $requiredpending Number of required videos still pending.
      */
     public function __construct(
         $videoguide,
@@ -69,7 +72,8 @@ class view_page implements renderable, templatable {
         $viewedcount,
         $totalvideos,
         $canmanage,
-        $displaymethod = 'newtab'
+        $displaymethod = 'newtab',
+        $requiredpending = 0
     ) {
         $this->videoguide = $videoguide;
         $this->videos = $videos;
@@ -78,6 +82,7 @@ class view_page implements renderable, templatable {
         $this->totalvideos = $totalvideos;
         $this->canmanage = $canmanage;
         $this->displaymethod = $displaymethod;
+        $this->requiredpending = $requiredpending;
     }
 
     /**
@@ -96,6 +101,7 @@ class view_page implements renderable, templatable {
         $data->totalvideos = $this->totalvideos;
         $data->canmanage = $this->canmanage;
         $data->displaymethod = $this->displaymethod;
+        $data->requiredpending = $this->requiredpending;
         $data->hasvideos = !empty($this->videos);
         $data->sesskey = sesskey();
         return $data;
