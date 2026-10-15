@@ -25,10 +25,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['addvideo'] = 'Add Video';
 $string['description'] = 'Description';
-$string['filterall'] = 'All';
-$string['filterpending'] = 'Pending';
-$string['filterrequired'] = 'Required';
-$string['filtervideos'] = 'Filter videos';
 $string['display_modal'] = 'Pop-up window (embedded)';
 $string['display_newtab'] = 'New browser tab';
 $string['display_popup'] = 'Floating window (browser pop-up)';
@@ -38,6 +34,10 @@ $string['displaymethod_help'] = 'Choose how the video links will open for studen
 * **New browser tab** – the video opens in a new tab.
 * **Pop-up window (modal)** – the video opens embedded in a window over the page (only works with platforms that allow embedding, e.g. YouTube).
 * **Floating window** – the video opens in a separate, resizable browser pop-up window.';
+$string['filterall'] = 'All';
+$string['filterpending'] = 'Pending';
+$string['filterrequired'] = 'Required';
+$string['filtervideos'] = 'Filter videos';
 $string['hidden'] = 'Hidden';
 $string['hiddenvideo'] = 'This video is not available.';
 $string['invalidurl'] = 'Please enter a valid URL starting with http:// or https://';
@@ -72,8 +72,8 @@ $string['videoguide:view'] = 'View video guide';
 $string['videoguidename'] = 'Guide Name';
 $string['videoguidename_help'] = 'Enter a name for this video guide.';
 $string['videos'] = 'Videos';
-$string['videotitle'] = 'Title';
 $string['videonumber'] = '#';
+$string['videotitle'] = 'Title';
 $string['videourl'] = 'Video URL';
 $string['visibility'] = 'Visibility';
 $string['visible'] = 'Visible';

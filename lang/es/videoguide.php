@@ -25,10 +25,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['addvideo'] = 'Añadir Video';
 $string['description'] = 'Descripción';
-$string['filterall'] = 'Todos';
-$string['filterpending'] = 'Pendientes';
-$string['filterrequired'] = 'Obligatorios';
-$string['filtervideos'] = 'Filtrar videos';
 $string['display_modal'] = 'Ventana emergente (incrustada)';
 $string['display_newtab'] = 'Nueva pestaña del navegador';
 $string['display_popup'] = 'Ventana flotante (pop-up del navegador)';
@@ -38,6 +34,10 @@ $string['displaymethod_help'] = 'Elija cómo se abrirán los enlaces de video pa
 * **Nueva pestaña del navegador** – el video se abre en una pestaña nueva.
 * **Ventana emergente (modal)** – el video se abre incrustado sobre la página (solo funciona con plataformas que permiten incrustar, como YouTube).
 * **Ventana flotante** – el video se abre en una ventana emergente (pop-up) del navegador, separable y redimensionable.';
+$string['filterall'] = 'Todos';
+$string['filterpending'] = 'Pendientes';
+$string['filterrequired'] = 'Obligatorios';
+$string['filtervideos'] = 'Filtrar videos';
 $string['hidden'] = 'Oculto';
 $string['hiddenvideo'] = 'Este video no está disponible.';
 $string['invalidurl'] = 'Por favor ingrese una URL válida que comience con http:// o https://';
@@ -71,8 +71,8 @@ $string['videoguide:view'] = 'Ver guía de videos';
 $string['videoguidename'] = 'Nombre de la Guía';
 $string['videoguidename_help'] = 'Ingrese un nombre para esta guía de videos.';
 $string['videos'] = 'Videos';
-$string['videotitle'] = 'Título';
 $string['videonumber'] = '#';
+$string['videotitle'] = 'Título';
 $string['videourl'] = 'URL del Video';
 $string['visibility'] = 'Visibilidad';
 $string['visible'] = 'Visible';
